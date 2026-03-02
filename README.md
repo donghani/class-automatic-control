@@ -1,4 +1,4 @@
-##소개 <br>
+소개 <br>
 • 강사 <br>
 &nbsp; – 전자공학과김동한교수(전자정보대학609호,내선번호3831) <br>
 &nbsp; – donghani@khu.ac.kr <br>
