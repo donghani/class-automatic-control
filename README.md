@@ -19,23 +19,23 @@
 
 ## 📚 주차별 강의 자료 (Lecture Slides)
 
-아래 강의 자료(PDF)는 본 저장소의 루트 디렉토리에 포함되어 있어 즉시 다운로드하거나 확인할 수 있습니다.
+아래 강의 자료(PDF)는 본 저장소의 **`강의자료`** 폴더에 정리되어 있어 다운로드하여 확인할 수 있습니다.
 
 | 장 / 주제 | 파일명 (다운로드 링크) | 주요 학습 내용 |
 | :--- | :--- | :--- |
-| **과목 소개** | [0 자동제어 과목 소개.pdf](./0%20%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B4%20%EA%B3%BC%EB%AA%A5%20%EC%86%8C%EA%B0%9C.pdf) | 과목 개요, 평가 방식, 범위 및 제어의 기본 개념 |
-| **제1장** | [Kuo의자동제어10e_01장.pdf](./Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_01%EC%9E%A5.pdf) | 제어 시스템의 역사 및 실생활 제어기 예시 |
-| **제2장** | [Kuo의자동제어10e_02장.pdf](./Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_02%EC%9E%A5.pdf) | 수학적 기초 (라플라스 변환, 미분방정식 모델링) |
-| **제3장** | [Kuo의자동제어10e_03v3.pdf](./Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_03v3.pdf) | 블록선도(Block Diagram) 및 신호흐름선도(SFG) |
-| **제4장** | [Kuo의자동제어10e_04v03.pdf](./Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_04v03.pdf) | 물리적 시스템의 수학적 모델링 (기계, 전기, 열) |
-| **제5장** | [Kuo의자동제어10e_05v01.pdf](./Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_05v01.pdf) | 제어 시스템의 시간 영역 분석 (과도 및 정상상태 응답) |
-| **제6장** | [Kuo의자동제어10e_06v02.pdf](./Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_06v02.pdf) | 선형 피드백 제어 시스템의 시간 영역 성능 사양 |
-| **제7장** | [Kuo의자동제어10e_07v1.pdf](./Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_07v1.pdf) | 근궤적 기법 (Root Locus Method) 기본 원리 |
-| **부록** | [Ziegler-Nichols Method.pdf](./Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_07%EB%B6%80%EB%A1%9D_Ziegler-Nichols-method.pdf) | PID 게인 동조를 위한 Ziegler-Nichols 휴리스틱 기법 |
-| **제8장** | [Kuo의자동제어10e_08v01.pdf](./Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_08%EC%9E%A5.pdf) | 주파수 영역 분석 (Bode Plot, Nyquist Criterion) |
-| **제9장** | [Kuo의자동제어10e_09v01.pdf](./Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_09v01.pdf) <br> [Kuo의자동제어10e_09v02.pdf](./Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_09v02.pdf) | 제어 시스템의 설계 (Lead, Lag, PID 보상기 설계) |
-| **제10장** | [Kuo의자동제어10e_10v01.pdf](./Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_10v01.pdf) | 상태 공간 분석 (State Space Analysis) 및 좌표 변환 |
-| **제11장** | [Kuo의자동제어10e_11v02.pdf](./Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_11v02.pdf) | 상태 피드백 제어 및 상태 관측기 설계 (Observer Design) |
+| **과목 소개** | [0 자동제어 과목 소개.pdf](./강의자료/0%20%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B4%20%EA%B3%BC%EB%AA%A5%20%EC%86%8C%EA%B0%9C.pdf) | 과목 개요, 평가 방식, 범위 및 제어의 기본 개념 |
+| **제1장** | [Kuo의자동제어10e_01장.pdf](./강의자료/Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_01%EC%9E%A5.pdf) | 제어 시스템의 역사 및 실생활 제어기 예시 |
+| **제2장** | [Kuo의자동제어10e_02장.pdf](./강의자료/Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_02%EC%9E%A5.pdf) | 수학적 기초 (라플라스 변환, 미분방정식 모델링) |
+| **제3장** | [Kuo의자동제어10e_03v3.pdf](./강의자료/Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_03v3.pdf) | 블록선도(Block Diagram) 및 신호흐름선도(SFG) |
+| **제4장** | [Kuo의자동제어10e_04v03.pdf](./강의자료/Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_04v03.pdf) | 물리적 시스템의 수학적 모델링 (기계, 전기, 열) |
+| **제5장** | [Kuo의자동제어10e_05v01.pdf](./강의자료/Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_05v01.pdf) | 제어 시스템의 시간 영역 분석 (과도 및 정상상태 응답) |
+| **제6장** | [Kuo의자동제어10e_06v02.pdf](./강의자료/Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_06v02.pdf) | 선형 피드백 제어 시스템의 시간 영역 성능 사양 |
+| **제7장** | [Kuo의자동제어10e_07v1.pdf](./강의자료/Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_07v1.pdf) | 근궤적 기법 (Root Locus Method) 기본 원리 |
+| **부록** | [Ziegler-Nichols Method.pdf](./강의자료/Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_07%EB%B6%80%EB%A1%9D_Ziegler-Nichols-method.pdf) | PID 게인 동조를 위한 Ziegler-Nichols 휴리스틱 기법 |
+| **제8장** | [Kuo의자동제어10e_08v01.pdf](./강의자료/Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_08v01.pdf) | 주파수 영역 분석 (Bode Plot, Nyquist Criterion) |
+| **제9장** | [Kuo의자동제어10e_09v01.pdf](./강의자료/Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_09v01.pdf) <br> [Kuo의자동제어10e_09v02.pdf](./강의자료/Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_09v02.pdf) | 제어 시스템의 설계 (Lead, Lag, PID 보상기 설계) |
+| **제10장** | [Kuo의자동제어10e_10v01.pdf](./강의자료/Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_10v01.pdf) | 상태 공간 분석 (State Space Analysis) 및 좌표 변환 |
+| **제11장** | [Kuo의자동제어10e_11v02.pdf](./강의자료/Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_11v02.pdf) | 상태 피드백 제어 및 상태 관측기 설계 (Observer Design) |
 
 ---
 
@@ -56,7 +56,9 @@
 ### 🎛️ 2. 상태 공간 기반 현대 제어 ([/MATLAB/state-space](./MATLAB/state-space))
 * **[control_demo_5_statespace.m](./MATLAB/state-space/control_demo_5_statespace.m):** 극점 배치 ➡️ LQR 최적제어 ➡️ 상태관측기 ➡️ LQG 제어 종합 비교.
 * **[lqr_5sec_design.m](./MATLAB/state-space/lqr_5sec_design.m):** 5초 정착 시간을 자동 만족시키는 LQR 가중치 최적 자동 튜닝 루프.
-* **학습 문서:** [현대제어 빌드업 강의록](./MATLAB/state-space/state_space_lecture.md), [LQR 튜닝 가이드](./MATLAB/state-space/lqr_tutorial.md), [사전 스케일러 $\bar{N}$ 유도 및 극점배치](./MATLAB/state-space/pole_placement.md)
+* **[create_simulink_models.m](./MATLAB/state-space/create_simulink_models.m):** 시뮬링크 연동 실습용 블록 다이어그램 모델 자동 생성 스크립트.
+* **[state_feedback_with_integral_ex.m](./MATLAB/state-space/state_feedback_with_integral_ex.m):** 시뮬링크 연동 상태 피드백 및 적분 제어 강인성 검증 코드.
+* **학습 문서:** [현대제어 빌드업 강의록](./MATLAB/state-space/state_space_lecture.md), [LQR 튜닝 가이드](./MATLAB/state-space/lqr_tutorial.md), [사전 스케일러 $\bar{N}$ 유도 및 극점배치](./MATLAB/state-space/pole_placement.md), [적분 제어 및 시뮬링크 실습 가이드](./MATLAB/state-space/state_feedback_integral_control.md), [MATLAB 현대 제어 실무 설계 가이드](./MATLAB/state-space/modern_control_design_guide.md)
 
 ---
 

@@ -26,12 +26,15 @@ MATLAB/
 └── 🎛️ state-space/            # [현대 제어] 상태 공간 기반 제어 기법
     ├── control_demo_5_statespace.m  - 극점 배치, LQR, Observer, LQG 제어 통합 실습
     ├── lqr_5sec_design.m            - 5초 정착 시간 만족을 위한 LQR 최적 가중치 자동 튜닝
+    ├── create_simulink_models.m     - 시뮬링크 연동용 블록 모델 (.slx) 자동 생성 스크립트
+    ├── state_feedback_with_integral_ex.m - 상태 피드백 및 적분 제어 시뮬링크 연동 실습 코드
     ├── pole_placement.md            - 상태 피드백 제어와 스케일러 N̄ 수학적 유도
     ├── state_space_lecture.md       - 4단계 현대 제어 기법 빌드업 강의 노트
     ├── lqr_tutorial.md (.html)      - LQR 튜닝법 및 정상상태 오차 보정 상세 가이드
-    └── *.png                        - LQR, Observer, LQG 시스템 블록선도 및 시뮬레이션 결과
+    ├── state_feedback_integral_control.md - 적분 제어 및 시뮬링크 실습 가이드 (수식 & 블록선도)
+    ├── modern_control_design_guide.md - MATLAB 현대 제어 실무 설계 가이드
+    └── *.png                        - LQR, Observer, LQG, Integral 제어 시스템 블록선도 및 시뮬레이션 결과
 ```
-
 ---
 
 ## 📈 1. 전달함수 기반 고전 제어 (`transfer-function/`)
@@ -60,11 +63,15 @@ MATLAB/
 ### 💻 실습 스크립트 (MATLAB Scripts)
 * **[control_demo_5_statespace.m](./state-space/control_demo_5_statespace.m):** 현대 제어 이론의 4단 빌드업(극점배치 ➡️ LQR 최적제어 ➡️ 상태관측기 결합 ➡️ 칼만필터 LQG 제어) 과정을 코드로 구현하여 노이즈와 추정 오차가 제어계에 미치는 영향을 완벽하게 대조 시뮬레이션합니다.
 * **[lqr_5sec_design.m](./state-space/lqr_5sec_design.m):** 가중치 행렬 $Q, R$ 튜닝의 번거로움을 해결하기 위해, 5초 정착 시간 만족을 향해 LQR 게인을 자동으로 최적 반복 업데이트하는 스마트 루프 스크립트입니다.
+* **[create_simulink_models.m](./state-space/create_simulink_models.m):** 시뮬링크 연동 실습에 필요한 정상 모델 및 적분기 모델(.slx)을 프로그래밍 방식으로 자동 생성하는 유틸리티입니다.
+* **[state_feedback_with_integral_ex.m](./state-space/state_feedback_with_integral_ex.m):** 시뮬링크 연동 상태 피드백 및 적분 제어를 구동하고, 외란 환경 하에서의 정상상태 강인성 추종 특성을 비교 분석하는 실습 코드입니다.
 
 ### 📚 강의 및 설명 문서 (Lecture Documents)
 * **[state_space_lecture.md](./state-space/state_space_lecture.md):** 4단계 현대 제어 기법(극점 배치, LQR, Observer, LQG)의 수학적 연계성과 개념의 진화를 블록선도와 시뮬레이션 데이터를 활용해 일목요연하게 풀어낸 빌드업 강의 노트입니다.
 * **[pole_placement.md](./state-space/pole_placement.md):** 아커만(Ackermann) 공식을 활용한 극점 배치법과, 정상상태 추종 오차를 0으로 맞추기 위한 사전 스케일러 $\bar{N}$의 수학적 유도 과정을 상세히 다룹니다.
 * **[lqr_tutorial.md](./state-space/lqr_tutorial.md):** 리카티 방정식(Riccati Equation)을 통한 최적화 원리와 Bryson Rule을 이용한 가중치 행렬 설정 실무 가이드를 제공합니다.
+* **[state_feedback_integral_control.md](./state-space/state_feedback_integral_control.md):** 상태 피드백 적분 제어의 필요성, 수학적 수식 유도, 블록선도 및 MATLAB/Simulink 연동 시뮬레이션 방법론을 총망라한 종합 실습 가이드북입니다.
+* **[modern_control_design_guide.md](./state-space/modern_control_design_guide.md):** 극점 배치 및 최적 LQR 제어계 설계를 돕는 MATLAB 현대 제어 실무 요약본 가이드입니다.
 
 ---
 
