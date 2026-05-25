@@ -157,49 +157,12 @@ $$
 ### 일반 상태 피드백 (방식 A)
 일반 상태 피드백은 시스템 외부에서 목표치 $r$을 단순히 상수로 스케일링($N$)하여 넣어주는 구조입니다. 시스템 내부에는 오차를 감지하고 스스로 보정하는 루프(Integrator Loop)가 없습니다.
 
-```mermaid
-flowchart LR
-    r([r]) --> N[N]
-    N --> Sum1(( + <br> - ))
-    Sum1 --> B["B"]
-    B --> SumState((+))
-    SumState --> IntState["∫ (1/s)"]
-    IntState --> State["x"]
-    State --> C["C"]
-    C --> y([y])
-    State --> A["A"]
-    A --> SumState
-    State --> K["K"]
-    K --> Sum1
-    
-    style r fill:#f9f,stroke:#333,stroke-width:2px
-    style y fill:#ccf,stroke:#333,stroke-width:2px
-```
+![일반 상태 피드백 블록선도](./state_feedback_normal.png)
 
 ### 적분 제어를 포함한 상태 피드백 (방식 B)
 적분 제어 구조에서는 실제 출력 $y$를 목표값 $r$로 직접 끌고 와서 오차($r-y$)를 구하고, 이를 **시스템 내부 전방 경로(Forward Path) 상에 배치된 적분기**에 통과시킵니다. 이 적분기가 에너지를 축적하여 모든 불확실성과 외란을 스스로 상쇄하도록 유도합니다.
 
-```mermaid
-flowchart LR
-    r([r]) --> SumErr(( + <br> - ))
-    SumErr --> IntErr["∫ (1/s)"]
-    IntErr --> Ki["K_i"]
-    Ki --> SumControl(( + <br> - ))
-    SumControl --> B["B"]
-    B --> SumState((+))
-    SumState --> IntState["∫ (1/s)"]
-    IntState --> State["x"]
-    State --> C["C"]
-    C --> y([y])
-    State --> A["A"]
-    A --> SumState
-    State --> K["K"]
-    K --> SumControl
-    y -->| - | SumErr
-    
-    style r fill:#f9f,stroke:#333,stroke-width:2px
-    style y fill:#ccf,stroke:#333,stroke-width:2px
-```
+![적분 제어 결합 상태 피드백 블록선도](./state_feedback_integral.png)
 
 ---
 
@@ -211,9 +174,70 @@ flowchart LR
 *   **공칭 모델 (제어기 설계용):** $\ddot{\theta} + 3\dot{\theta} + 2\theta = u$ (즉, $a_0 = 2, a_1 = 3, b = 1$)
 *   **실제 시스템 (시뮬레이션용):** 파라미터 오차가 존재하고 ($a_0 = 1.5, b = 1.2$), $t = 5$초 시점에 $0.5$ 크기의 상수 외란(예: 역방향 토크)이 들어오는 최악의 시나리오를 설정했습니다.
 
+이 시뮬레이션에서는 MATLAB과 **Simulink(시뮬링크)**를 연동하여 두 제어기의 물리적 거동을 모델링하고 검증합니다. 
+
+학생들이 직접 시뮬링크 블록선도를 완성해볼 수 있도록 아래 가이드에 따라 두 개의 모델(`.slx` 파일)을 먼저 구축해 봅시다.
+
+---
+
+### 🛠️ [사전 준비] 시뮬링크 모델 설계 가이드 (Step-by-Step)
+
+시뮬링크를 실행(`simulink` 입력)하고 새 모델을 생성하여 아래와 같이 블록선도를 그립니다.
+
+#### 1) 일반 상태 피드백 모델 (`sf_normal_model.slx`)
+*   **Step 블록 (`Step_r`):** 
+    *   Step time = `0`, Initial value = `0`, Final value = `r` (목표값 입력)
+*   **Gain 블록 (`Pre-scaler N`):** 
+    *   Gain = `N_ff` (목표치 추종을 위한 스케일러)
+*   **Sum 블록 (`Sum_u`):** 
+    *   List of signs = `+-` (사전 스케일러 입력에서 상태 피드백 값을 감산)
+*   **Sum 블록 (`Sum_dist`):** 
+    *   List of signs = `++` (제어 입력 $u$에 외란 $d$를 가산)
+*   **Step 블록 (`Step_dist`):** 
+    *   Step time = `5`, Initial value = `0`, Final value = `dist_val` (5초 시점에 상수 외란 인가)
+*   **State-Space 블록 (`Plant_SS`):** 
+    *   Continuous-time State-Space 블록을 추가하고 파라미터를 다음과 같이 입력합니다.
+        *   $A$ = `A_act`, $B$ = `B_act`, $C$ = `C_act`, $D$ = `0`
+*   **Gain 블록 (`Feedback_K`):** 
+    *   Gain = `K_sf`
+    *   **⚠️ 중요 설정:** Gain 블록을 더블 클릭한 후 **Multiplication** 옵션을 `Matrix(u*K)`로 반드시 변경해 주어야 행렬 곱셉이 올바르게 수행됩니다. (기본값은 원소별 곱셈인 Element-wise임)
+    *   State-Space 블록의 상태 출력 $x(t)$를 이 Gain 블록에 입력한 뒤, 그 출력을 `Sum_u` 블록의 마이너스(`-`) 단자에 연결합니다.
+*   **To Workspace 블록 (`yout`):**
+    *   State-Space 블록의 최종 출력 $y(t)$를 To Workspace 블록에 연결하여 데이터를 MATLAB으로 보냅니다.
+    *   Save format = `Timeseries`, Variable name = `yout`
+
+#### 2) 적분 제어 결합 상태 피드백 모델 (`sf_integral_model.slx`)
+*   **오차 계산 Sum 블록 (`Sum_err`):**
+    *   Step 블록(`Step_r`)의 목표값 $r$에서 실제 출력 $y$를 감산하기 위해 List of signs = `+-` 설정
+*   **Integrator 블록 (`Integrator`):** 
+    *   오차 신호($r-y$)를 연속 적분하여 적분 상태 $x_i(t)$를 생성
+*   **Gain 블록 (`Gain_Ki`):** 
+    *   Gain = `Ki` (적분 제어 게인)
+*   **제어 입력 Sum 블록 (`Sum_u`):** 
+    *   List of signs = `+-` (적분 제어 입력 $K_i x_i$에서 상태 피드백 $Kx$를 감산)
+*   **State-Space 블록 (`Plant_SS`):**
+    *   상태 변수 피드백을 위해 State-Space 블록의 파라미터를 아래와 같이 입력하여 상태 $x$ 전체를 출력으로 내보냅니다.
+        *   $A$ = `A_act`, $B$ = `B_act`, $C$ = `eye(2)`, $D$ = `[0;0]`
+*   **Gain 블록 (`Feedback_K`):** 
+    *   Gain = `K`, Multiplication = `Matrix(u*K)`
+    *   State-Space 블록의 2차원 출력(상태 $x$)을 이 블록에 입력하여 피드백 값 $Kx$를 만들고, `Sum_u` 블록의 마이너스 단자에 연결합니다.
+*   **Gain 블록 (`C_matrix_gain`):**
+    *   Gain = `C_act`, Multiplication = `Matrix(u*K)`
+    *   2차원 상태 변수 $x(t)$에서 최종 출력 $y(t) = Cx(t)$를 뽑아내기 위해 사용합니다. 이 블록의 출력을 `Sum_err` 블록의 마이너스 단자와 To Workspace 블록(`yout`)에 연결합니다.
+*   **To Workspace 블록 (`yout`):** 
+    *   Save format = `Timeseries`, Variable name = `yout`
+
+---
+
+### 💻 MATLAB & Simulink 연동 실행 코드
+
+아래의 매트랩 코드(`state_feedback_simulink_run.m`)를 작성하고 실행하면, 공칭 모델 기반으로 상태 피드백 및 적분 제어기를 자동 설계한 뒤 **시뮬링크 모델을 백그라운드에서 실행(`sim` 명령어)하고 시뮬레이션 데이터를 받아와 그래프로 비교**해 줍니다. 
+
+*(만약 시뮬링크 모델 파일이 없거나 생성하지 않은 상태라면, 오류를 방지하고 시각적 확인을 할 수 있도록 `ode45` 기반의 수치 연산 시뮬레이션으로 자동 대체하여 그래프를 렌더링합니다.)*
+
 ```matlab
-%% 상태 피드백 제어 vs 적분 제어 비교 시뮬레이션
-% 이 스크립트는 모델 불확실성과 외란이 있을 때 적분 제어기의 성능을 비교합니다.
+%% 상태 피드백 제어 vs 적분 제어 시뮬링크 연동 시뮬레이션
+% 이 스크립트는 모델 불확실성과 외란이 있을 때 상태 피드백 및 적분 제어기의 성능을 비교합니다.
 
 clear; clc; close all;
 
@@ -223,14 +247,16 @@ a0_nom = 2; a1_nom = 3; b_nom = 1;
 A_nom = [0 1; -a0_nom -a1_nom];
 B_nom = [0; b_nom];
 C_nom = [1 0]; % 출력 y = x1 (위치)
+D_nom = 0;
 
 % 시뮬레이션에 사용할 실제 '물리 시스템' (Actual Model - 파라미터 오차 반영)
 a0_act = 1.5; a1_act = 2.5; b_act = 1.2;
 A_act = [0 1; -a0_act -a1_act];
 B_act = [0; b_act];
 C_act = [1 0];
+D_act = 0;
 
-% 목표값 및 외란 조건
+% 목표값 및 외란 조건 (시뮬링크 Step 블록에서 파라미터로 참조)
 r = 1.0;          % 목표값 (Step Input)
 dist_val = 0.5;   % t = 5초에 인가될 입력단 상수 외란
 
@@ -249,59 +275,51 @@ poles_aug = [-3, -4, -5]; % 원하는 확장 폐루프 극점
 K_aug = acker(A_aug, B_aug, poles_aug);
 
 K = K_aug(1:2);
-Ki = -K_aug(3); % u = -K*x + Ki*xi 설계이므로 세 번째 극배치 이득에 마이너스를 취함
+Ki = -K_aug(3); % u = -K*x + Ki*xi
 
-%% 3. 시뮬레이션 수행
-tspan = 0:0.01:10;
-x0_sf = [0; 0];         % 일반 상태 피드백 초기값 [x1; x2]
-x0_int = [0; 0; 0];     % 적분 상태 피드백 초기값 [x1; x2; xi]
+%% 3. 시뮬링크 모델 실행
+disp('시뮬링크 모델을 시뮬레이션하는 중...');
 
-% ODE Solver를 이용한 수치 해석 시뮬레이션
-[t_sf, y_sf] = ode45(@(t, x) standard_sf_ode(t, x, A_act, B_act, K_sf, N_ff, r, dist_val), tspan, x0_sf);
-[t_int, y_int] = ode45(@(t, x_aug) integral_sf_ode(t, x_aug, A_act, B_act, C_act, K, Ki, r, dist_val), tspan, x0_int);
+% Simulink 1: 일반 상태 피드백 모델 실행
+try
+    out_sf = sim('sf_normal_model');
+    t_sf = out_sf.tout;
+    y_sf = out_sf.yout;
+    disp('일반 상태 피드백 시뮬링크 시뮬레이션 완료.');
+catch
+    warning('sf_normal_model.slx 파일이 없습니다. 수치 시뮬레이션(ode45)으로 대체합니다.');
+    tspan = 0:0.01:10;
+    x0_sf = [0; 0];
+    [t_sf, x_sf] = ode45(@(t, x) [0 1; -a0_act -a1_act]*x + [0; b_act]*(-K_sf*x + N_ff*r + (t>=5)*dist_val), tspan, x0_sf);
+    y_sf = x_sf(:, 1);
+end
+
+% Simulink 2: 적분 제어 결합 상태 피드백 모델 실행
+try
+    out_int = sim('sf_integral_model');
+    t_int = out_int.tout;
+    y_int = out_int.yout;
+    disp('적분 피드백 시뮬링크 시뮬레이션 완료.');
+catch
+    warning('sf_integral_model.slx 파일이 없습니다. 수치 시뮬레이션(ode45)으로 대체합니다.');
+    tspan = 0:0.01:10;
+    x0_int = [0; 0; 0];
+    [t_int, x_int] = ode45(@(t, x_aug) [ [0 1; -a0_act -a1_act], [0; 0]; -C_act, 0]*x_aug + [0; b_act; 0]*(-K*x_aug(1:2) + Ki*x_aug(3) + (t>=5)*dist_val) + [0; 0; 1]*r, tspan, x0_int);
+    y_int = x_int(:, 1);
+end
 
 %% 4. 결과 시각화
 figure('Position', [100, 100, 900, 500]);
-plot(t_sf, y_sf(:,1), 'r--', 'LineWidth', 2.0); hold on;
-plot(t_int, y_int(:,1), 'b-', 'LineWidth', 2.0);
+plot(t_sf, y_sf, 'r--', 'LineWidth', 2.0); hold on;
+plot(t_int, y_int, 'b-', 'LineWidth', 2.0);
 yline(r, 'k:', 'LineWidth', 1.5);
 xline(5, 'r:', 't = 5s (외란 유입)', 'LabelVerticalAlignment', 'bottom', 'LineWidth', 1.2);
 
 grid on;
 xlabel('시간 (Time, s)', 'FontSize', 12);
 ylabel('출력 (Output, y)', 'FontSize', 12);
-title('모델 불확실성 및 외란 조건에서의 제어 성능 비교', 'FontSize', 14);
+title('시뮬링크 연동: 모델 불확실성 및 외란 조건 제어 성능 비교', 'FontSize', 14);
 legend('일반 상태 피드백 (u = -Kx + Nr)', '적분 피드백 (u = -Kx + Ki*xi)', '목표값 (r)', 'Location', 'SouthEast');
-
-%% 5. ODE 미분방정식 정의 함수들
-% 일반 상태 피드백 시뮬레이션 모델
-function dxdt = standard_sf_ode(t, x, A, B, K, N, r, dist_val)
-    % t = 5초 이상일 때 외란 발생
-    d = 0;
-    if t >= 5
-        d = dist_val;
-    end
-    u = -K * x + N * r;
-    dxdt = A * x + B * (u + d);
-end
-
-% 적분 제어가 포함된 상태 피드백 시뮬레이션 모델
-function dxaugdt = integral_sf_ode(t, x_aug, A, B, C, K, Ki, r, dist_val)
-    x = x_aug(1:2);
-    xi = x_aug(3);
-    
-    % t = 5초 이상일 때 외란 발생
-    d = 0;
-    if t >= 5
-        d = dist_val;
-    end
-    
-    u = -K * x + Ki * xi;
-    dxdt = A * x + B * (u + d);
-    dxidt = r - C * x; % \dot{x_i} = r - y
-    
-    dxaugdt = [dxdt; dxidt];
-end
 ```
 
 ---
