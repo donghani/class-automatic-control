@@ -1,87 +1,1117 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Class Automatic Control</title>
-    <style>
-      body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        line-height: 1.6;
-        margin: 20px;
-        color: #333;
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>자동제어공학 (Automatic Control Engineering) | 경희대학교</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <style>
+    /* Modern Reset & Base Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-dark: #0f172a;
+      --bg-card: rgba(30, 41, 59, 0.7);
+      --bg-card-hover: rgba(30, 41, 59, 0.95);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #38bdf8;
+      --primary-glow: rgba(56, 189, 248, 0.15);
+      --secondary: #a855f7;
+      --secondary-glow: rgba(168, 85, 247, 0.15);
+      --accent: #22c55e;
+      --accent-glow: rgba(34, 197, 94, 0.15);
+      --font-outfit: 'Outfit', 'Noto Sans KR', sans-serif;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Noto Sans KR', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+      min-height: 100vh;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.06) 0%, transparent 40%);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    /* Header Section */
+    header {
+      text-align: center;
+      margin-bottom: 50px;
+      position: relative;
+    }
+
+    .university-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      padding: 6px 16px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--primary);
+      margin-bottom: 20px;
+      backdrop-filter: blur(10px);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    h1 {
+      font-family: var(--font-outfit);
+      font-size: 2.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff 30%, var(--primary) 70%, var(--secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .header-subtitle {
+      color: var(--text-muted);
+      font-size: 1.15rem;
+      max-width: 700px;
+      margin: 0 auto;
+      font-weight: 300;
+    }
+
+    /* Banner Illustration */
+    .banner-container {
+      margin-bottom: 50px;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      position: relative;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(10px);
+    }
+
+    .banner-container img {
+      width: 100%;
+      height: auto;
+      max-height: 400px;
+      object-fit: cover;
+      display: block;
+      transition: var(--transition);
+      opacity: 0.85;
+    }
+
+    .banner-container:hover img {
+      transform: scale(1.02);
+      opacity: 0.95;
+    }
+
+    /* Navigation Tabs */
+    .tabs-nav {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 40px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 15px;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      font-weight: 500;
+      padding: 12px 24px;
+      cursor: pointer;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition);
+    }
+
+    .tab-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+      background: rgba(56, 189, 248, 0.08);
+      box-shadow: inset 0 0 0 1px rgba(56, 189, 248, 0.25);
+    }
+
+    /* Tab Content panels */
+    .tab-panel {
+      display: none;
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Search & Filter bar */
+    .search-wrapper {
+      margin-bottom: 30px;
+      position: relative;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .search-input {
+      width: 100%;
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid var(--border-color);
+      padding: 14px 20px 14px 50px;
+      border-radius: 14px;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-glow);
+      background: rgba(30, 41, 59, 0.8);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+      transition: var(--transition);
+    }
+
+    .search-input:focus + .search-icon {
+      color: var(--primary);
+    }
+
+    /* Grid Layouts */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 25px;
+    }
+
+    /* Lecture Card */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: var(--transition);
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      background: var(--bg-card-hover);
+      border-color: rgba(56, 189, 248, 0.2);
+      box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.4), 0 0 20px 0 var(--primary-glow);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .chapter-badge {
+      font-family: var(--font-outfit);
+      font-size: 12px;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 4px 10px;
+      border-radius: 8px;
+      color: var(--text-muted);
+    }
+
+    .card:hover .chapter-badge {
+      color: var(--primary);
+      background: rgba(56, 189, 248, 0.1);
+      border-color: rgba(56, 189, 248, 0.2);
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--text-main);
+    }
+
+    .card-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      font-weight: 300;
+      margin-bottom: 24px;
+      flex-grow: 1;
+    }
+
+    .card-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      padding: 12px 20px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .card-btn:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #000;
+      box-shadow: 0 10px 20px -5px rgba(56, 189, 248, 0.4);
+    }
+
+    /* MATLAB Lab Layout */
+    .lab-section {
+      margin-bottom: 50px;
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+
+    .section-title.classical { color: var(--primary); }
+    .section-title.modern { color: var(--secondary); }
+
+    .lab-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .lab-grid {
+        grid-template-columns: repeat(2, 1fr);
       }
-      h1 {
-        border-bottom: 2px solid #eee;
-        padding-bottom: 5px;
+    }
+
+    .lab-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      position: relative;
+      transition: var(--transition);
+      backdrop-filter: blur(10px);
+    }
+
+    .lab-card:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      background: var(--bg-card-hover);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .lab-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .lab-icon-box {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .classical .lab-icon-box { color: var(--primary); background: rgba(56, 189, 248, 0.08); }
+    .modern .lab-icon-box { color: var(--secondary); background: rgba(168, 85, 247, 0.08); }
+
+    .file-extension {
+      font-family: var(--font-outfit);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+    .ext-m { background: #d97706; color: #fff; }
+    .ext-md { background: #0284c7; color: #fff; }
+
+    .lab-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .lab-desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+      font-weight: 300;
+    }
+
+    .lab-links {
+      display: flex;
+      gap: 12px;
+    }
+
+    .lab-link-btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-main);
+      transition: var(--transition);
+    }
+
+    .lab-link-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Course Info / Professor Tab */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+
+    @media (min-width: 900px) {
+      .info-grid {
+        grid-template-columns: 1.2fr 1.8fr;
       }
-      ul {
-        list-style-type: disc;
-        margin-bottom: 10px;
-      }
-      ul ul {
-        list-style-type: circle;
-        margin-top: 5px;
-      }
-      a {
-        color: #0366d6;
-        text-decoration: none;
-      }
-      a:hover {
-        text-decoration: underline;
-      }
-    </style>
-  </head>
-  <body>
-    <div style="display: flex; margin-bottom: 20px; justify-content: center;">
-      <img src="automatic_control_concept.png" alt="Control Theory Concept Illustration" style="width: 100%; max-width: 1000px; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    }
+
+    .profile-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+
+    .avatar-wrapper {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 20px auto;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #fff;
+      box-shadow: 0 10px 25px rgba(56, 189, 248, 0.2);
+    }
+
+    .prof-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .prof-title {
+      color: var(--primary);
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-bottom: 25px;
+    }
+
+    .prof-info-list {
+      text-align: left;
+      list-style: none;
+    }
+
+    .prof-info-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    .prof-info-list li:last-child {
+      border: none;
+    }
+
+    .prof-info-list li i {
+      color: var(--primary);
+    }
+
+    .details-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 30px;
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .detail-item h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .detail-item h3 i {
+      color: var(--secondary);
+    }
+
+    .detail-item p {
+      color: var(--text-muted);
+      font-weight: 300;
+      font-size: 0.95rem;
+    }
+
+    /* Textbook sub-card */
+    .textbook-box {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 10px;
+    }
+
+    .textbook-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(168, 85, 247, 0.1);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--secondary);
+      font-size: 1.5rem;
+    }
+
+    /* YouTube Card */
+    .youtube-banner {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(15, 23, 42, 0.8) 100%);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    .youtube-banner-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .youtube-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #ef4444;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .yt-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #fca5a5;
+    }
+
+    .yt-link {
+      align-self: flex-start;
+      background: #ef4444;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .yt-link:hover {
+      background: #dc2626;
+      box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      margin-top: 80px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 300;
+    }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="university-badge">
+        <i data-lucide="graduation-cap" style="width: 16px; height: 16px;"></i>
+        Kyung Hee University
+      </div>
+      <h1>자동제어공학</h1>
+      <p class="header-subtitle">전자공학과 김동한 교수님의 자동제어공학 강의자료 및 MATLAB 시뮬레이션 실습 아카이브</p>
+    </header>
+
+    <!-- Concept Illustration Banner -->
+    <div class="banner-container">
+      <img src="automatic_control_concept.png" alt="Automatic Control Engineering Concept Illustration">
     </div>
-    <h1>소개</h1>
-    <ul>
-      <li>
-        <strong>강사</strong>
-        <ul>
-          <li>전자공학과 김동한 교수 (전자정보대학 609호, 내선번호 3831)</li>
-          <li>donghani@khu.ac.kr</li>
-          <li>상담시간: 수업 후 1시간</li>
-        </ul>
-      </li>
-      <li>
-        <strong>교과서</strong>
-        <ul>
-          <li>
-            Kuo의 자동제어 10판 (저자: Farid Golnaraghi and Benjamin C. Kuo)
-          </li>
-          <li>보조자료: 인터넷 활용 (Google, Youtube)</li>
-        </ul>
-      </li>
-      <li>
-        <strong>강의자료</strong>
-        <ul>
-          <li>
-            <a href="https://e-campus.khu.ac.kr">https://e-campus.khu.ac.kr</a>
-            에 pdf로 업로드함
-          </li>
-          <li>
-            <a href="https://github.com/donghani/class-automatic-control/"
-              >https://github.com/donghani/class-automatic-control/</a
-            >
-            에도 업로드함
-          </li>
-        </ul>
-      </li>
-      <li>
-        <strong
-          >강의영상 녹화본은 youtube에 업로드함 (경희대 김동한으로 검색)</strong
-        >
-        <ul>
-          <li>
-            <a href="https://www.youtube.com/channel/UCT_h-5YhlC0t9LEdVckdrXQ"
-              >https://www.youtube.com/channel/UCT_h-5YhlC0t9LEdVckdrXQ</a
-            >
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </body>
+
+    <!-- Tabs Navigation -->
+    <nav class="tabs-nav">
+      <button class="tab-btn active" onclick="switchTab('lectures')">
+        <i data-lucide="book-open" style="width: 18px; height: 18px;"></i>
+        강의 자료 (PDF)
+      </button>
+      <button class="tab-btn" onclick="switchTab('matlab')">
+        <i data-lucide="terminal" style="width: 18px; height: 18px;"></i>
+        MATLAB 실습실
+      </button>
+      <button class="tab-btn" onclick="switchTab('info')">
+        <i data-lucide="info" style="width: 18px; height: 18px;"></i>
+        교수 및 과목 정보
+      </button>
+    </nav>
+
+    <!-- TAB 1: Lectures -->
+    <div id="lectures" class="tab-panel active">
+      <!-- Search Input -->
+      <div class="search-wrapper">
+        <input type="text" id="lectureSearch" class="search-input" placeholder="강의 주제 또는 챕터 검색..." oninput="filterLectures()">
+        <i data-lucide="search" class="search-icon" style="width: 20px; height: 20px;"></i>
+      </div>
+
+      <!-- Lectures Grid -->
+      <div class="cards-grid" id="lecturesGrid">
+        <!-- Ch 0 -->
+        <div class="card" data-title="자동제어 과목 소개 0장">
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="chapter-badge">O.T.</span>
+            </div>
+            <h3 class="card-title">0장. 과목 소개</h3>
+            <p class="card-desc">자동제어공학의 전반적인 학습 목표, 평가 방식, 주차별 로드맵 및 기본 제어 개념 오리엔테이션.</p>
+          </div>
+          <a class="card-btn" href="./0%20%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B4%20%EA%B3%BC%EB%AA%A5%20%EC%86%8C%EA%B0%9C.pdf" download>
+            <i data-lucide="download" style="width: 16px; height: 16px;"></i>
+            PDF 다운로드
+          </a>
+        </div>
+
+        <!-- Ch 1 -->
+        <div class="card" data-title="제1장 제어 시스템 서론">
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="chapter-badge">Chapter 01</span>
+            </div>
+            <h3 class="card-title">1장. 제어 시스템 서론</h3>
+            <p class="card-desc">제어 시스템의 발달 역사, 기본 정의, 피드백 제어의 중요성 및 우리 주변의 다양한 제어 사례 분석.</p>
+          </div>
+          <a class="card-btn" href="./Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_01%EC%9E%A5.pdf" download>
+            <i data-lucide="download" style="width: 16px; height: 16px;"></i>
+            PDF 다운로드
+          </a>
+        </div>
+
+        <!-- Ch 2 -->
+        <div class="card" data-title="제2장 제어 시스템의 수학적 기초 라플라스">
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="chapter-badge">Chapter 02</span>
+            </div>
+            <h3 class="card-title">2장. 수학적 기초</h3>
+            <p class="card-desc">라플라스 변환(Laplace Transform), 전이함수(Transfer Function), 유도식 및 회로·기계 시스템의 수학적 수학 기초.</p>
+          </div>
+          <a class="card-btn" href="./Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_02%EC%9E%A5.pdf" download>
+            <i data-lucide="download" style="width: 16px; height: 16px;"></i>
+            PDF 다운로드
+          </a>
+        </div>
+
+        <!-- Ch 3 -->
+        <div class="card" data-title="제3장 블록선도 신호흐름선도 mason sfg">
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="chapter-badge">Chapter 03</span>
+            </div>
+            <h3 class="card-title">3장. 블록선도 & 신호흐름선도</h3>
+            <p class="card-desc">블록 대수식, Mason의 이득 공식을 활용하여 다중 루프 복잡 시스템을 간소화하고 전달함수 구하기.</p>
+          </div>
+          <a class="card-btn" href="./Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_03v3.pdf" download>
+            <i data-lucide="download" style="width: 16px; height: 16px;"></i>
+            PDF 다운로드
+          </a>
+        </div>
+
+        <!-- Ch 4 -->
+        <div class="card" data-title="제4장 물리적 시스템의 수학적 모델링 모터">
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="chapter-badge">Chapter 04</span>
+            </div>
+            <h3 class="card-title">4. 물리적 시스템 모델링</h3>
+            <p class="card-desc">DC 기어드 모터, 열역학, 센서 및 기계 연동 동적 시스템의 물리 법칙에 입각한 지배방정식 모델링.</p>
+          </div>
+          <a class="card-btn" href="./Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_04v03.pdf" download>
+            <i data-lucide="download" style="width: 16px; height: 16px;"></i>
+            PDF 다운로드
+          </a>
+        </div>
+
+        <!-- Ch 5 -->
+        <div class="card" data-title="제5장 시간 영역 분석 과도 상태 정상 상태">
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="chapter-badge">Chapter 05</span>
+            </div>
+            <h3 class="card-title">5장. 시간 영역 분석</h3>
+            <p class="card-desc">1차 및 2차 시스템의 과도 사양(상승시간, 오버슈트, 정착시간) 정량 분석과 정상상태 정적 오차 해석.</p>
+          </div>
+          <a class="card-btn" href="./Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_05v01.pdf" download>
+            <i data-lucide="download" style="width: 16px; height: 16px;"></i>
+            PDF 다운로드
+          </a>
+        </div>
+
+        <!-- Ch 6 -->
+        <div class="card" data-title="제6장 피드백 제어 시스템의 분석 외란 안정도 루스 허위츠">
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="chapter-badge">Chapter 06</span>
+            </div>
+            <h3 class="card-title">6장. 피드백 제어 분석</h3>
+            <p class="card-desc">외란 억제 특성, 파라미터 변화 민감도(Sensitivity), 루스-허위츠(Routh-Hurwitz) 표를 이용한 시스템 안정성 해석.</p>
+          </div>
+          <a class="card-btn" href="./Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_06v02.pdf" download>
+            <i data-lucide="download" style="width: 16px; height: 16px;"></i>
+            PDF 다운로드
+          </a>
+        </div>
+
+        <!-- Ch 7 -->
+        <div class="card" data-title="제7장 근궤적 기법 root locus">
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="chapter-badge">Chapter 07</span>
+            </div>
+            <h3 class="card-title">7장. 근궤적 기법 (Root Locus)</h3>
+            <p class="card-desc">제어 이득 K 변화에 따른 폐루프 극점 이동 경로를 실수가선 및 점근선 규칙으로 직접 작도하는 기술 유도.</p>
+          </div>
+          <a class="card-btn" href="./Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_07v1.pdf" download>
+            <i data-lucide="download" style="width: 16px; height: 16px;"></i>
+            PDF 다운로드
+          </a>
+        </div>
+
+        <!-- ZN Appendix -->
+        <div class="card" data-title="부록 ziegler nichols method pid 동조">
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="chapter-badge">Appendix</span>
+            </div>
+            <h3 class="card-title">부록. Ziegler-Nichols 동조법</h3>
+            <p class="card-desc">안정한 한계 게인과 한계 주기를 활용하여 수학 모델 없이도 실용적인 PID 이득을 설계하는 휴리스틱 매뉴얼.</p>
+          </div>
+          <a class="card-btn" href="./Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_07%EB%B5%80%EB%A1%9D_Ziegler-Nichols-method.pdf" download>
+            <i data-lucide="download" style="width: 16px; height: 16px;"></i>
+            PDF 다운로드
+          </a>
+        </div>
+
+        <!-- Ch 8 -->
+        <div class="card" data-title="제8장 주파수 영역 분석 보드선도 nyquist 나이퀴스트">
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="chapter-badge">Chapter 08</span>
+            </div>
+            <h3 class="card-title">8장. 주파수 영역 분석</h3>
+            <p class="card-desc">보드선도(Bode Plot), 나이퀴스트 선도(Nyquist) 작도, 이득여유(Gain Margin) 및 위상여유(Phase Margin) 측정법.</p>
+          </div>
+          <a class="card-btn" href="./Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_08v01.pdf" download>
+            <i data-lucide="download" style="width: 16px; height: 16px;"></i>
+            PDF 다운로드
+          </a>
+        </div>
+
+        <!-- Ch 9 -->
+        <div class="card" data-title="제9장 피드백 제어 시스템의 설계 진상 지상 pid 보상기 lead lag">
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="chapter-badge">Chapter 09</span>
+            </div>
+            <h3 class="card-title">9장. 보상기 및 PID 제어 설계</h3>
+            <p class="card-desc">위상 진상(Lead)/지상(Lag) 보상기 설계와 비례-적분-미분(PID) 제어의 수학적 파라미터 매칭 기법.</p>
+          </div>
+          <a class="card-btn" href="./Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_09v01.pdf" download>
+            <i data-lucide="download" style="width: 16px; height: 16px;"></i>
+            PDF 다운로드 (1부)
+          </a>
+        </div>
+
+        <!-- Ch 10 -->
+        <div class="card" data-title="제10장 상태 공간 분석법 행렬 좌표 변환">
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="chapter-badge">Chapter 10</span>
+            </div>
+            <h3 class="card-title">10장. 상태 공간 분석법</h3>
+            <p class="card-desc">상태 방정식(State Equation) 모델링, 상태 천이 행렬 연산, 가관측성(Observability) 및 가제어성(Controllability) 판별.</p>
+          </div>
+          <a class="card-btn" href="./Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_10v01.pdf" download>
+            <i data-lucide="download" style="width: 16px; height: 16px;"></i>
+            PDF 다운로드
+          </a>
+        </div>
+
+        <!-- Ch 11 -->
+        <div class="card" data-title="제11장 상태 피드백 제어 설계 극점 배치 관측기 observer">
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="chapter-badge">Chapter 11</span>
+            </div>
+            <h3 class="card-title">11장. 상태 공간 제어 설계</h3>
+            <p class="card-desc">아커만 공식을 사용한 극점 배치법(Pole Placement), 상태관측기(State Observer) 및 보정 사전이득 스케일러 설계.</p>
+          </div>
+          <a class="card-btn" href="./Kuo%EC%9D%98%EC%9E%90%EB%8F%99%EC%A0%9C%EC%96%B410e_11v02.pdf" download>
+            <i data-lucide="download" style="width: 16px; height: 16px;"></i>
+            PDF 다운로드
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: MATLAB Lab -->
+    <div id="matlab" class="tab-panel">
+      <!-- 1. Classical Control -->
+      <section class="lab-section classical">
+        <h2 class="section-title classical">
+          <i data-lucide="trending-up"></i>
+          전달함수 기반 고전 제어 실습 (Classical Control)
+        </h2>
+        <div class="lab-grid">
+          <div class="lab-card">
+            <div class="lab-card-header">
+              <div class="lab-icon-box"><i data-lucide="cpu" style="width: 20px; height: 20px;"></i></div>
+              <span class="file-extension ext-m">MATLAB .m</span>
+            </div>
+            <h4 class="lab-title">control_demo_1_pid.m</h4>
+            <p class="lab-desc">P, PI, PID 제어기 계수 설정에 따른 오버슈트, 정상상태 오차 시간 응답 시각화.</p>
+            <div class="lab-links">
+              <a href="./MATLAB/transfer-function/control_demo_1_pid.m" class="lab-link-btn">코드로 이동</a>
+            </div>
+          </div>
+
+          <div class="lab-card">
+            <div class="lab-card-header">
+              <div class="lab-icon-box"><i data-lucide="bar-chart-2" style="width: 20px; height: 20px;"></i></div>
+              <span class="file-extension ext-m">MATLAB .m</span>
+            </div>
+            <h4 class="lab-title">control_demo_2_analysis.m</h4>
+            <p class="lab-desc">시스템 Poles, Zeros 분포 및 보드선도, 나이퀴스트, 근궤적 종합 시뮬레이션 코드.</p>
+            <div class="lab-links">
+              <a href="./MATLAB/transfer-function/control_demo_2_analysis.m" class="lab-link-btn">코드로 이동</a>
+            </div>
+          </div>
+
+          <div class="lab-card">
+            <div class="lab-card-header">
+              <div class="lab-icon-box"><i data-lucide="sliders" style="width: 20px; height: 20px;"></i></div>
+              <span class="file-extension ext-m">MATLAB .m</span>
+            </div>
+            <h4 class="lab-title">control_demo_3_compensator.m</h4>
+            <p class="lab-desc">주파수 도메인 성능 요건을 충족시키는 위상 진상(Lead) 및 위상 지상(Lag) 보상기 코딩.</p>
+            <div class="lab-links">
+              <a href="./MATLAB/transfer-function/control_demo_3_compensator.m" class="lab-link-btn">코드로 이동</a>
+            </div>
+          </div>
+
+          <div class="lab-card">
+            <div class="lab-card-header">
+              <div class="lab-icon-box"><i data-lucide="activity" style="width: 20px; height: 20px;"></i></div>
+              <span class="file-extension ext-m">MATLAB .m</span>
+            </div>
+            <h4 class="lab-title">control_demo_4_noise_filter.m</h4>
+            <p class="lab-desc">미분기 노이즈 증폭 원리 실습 및 LPF 통합 미분 필터 저감 효과 대조.</p>
+            <div class="lab-links">
+              <a href="./MATLAB/transfer-function/control_demo_4_noise_filter.m" class="lab-link-btn">코드로 이동</a>
+            </div>
+          </div>
+
+          <div class="lab-card">
+            <div class="lab-card-header">
+              <div class="lab-icon-box"><i data-lucide="book-open-check" style="width: 20px; height: 20px;"></i></div>
+              <span class="file-extension ext-md">Document</span>
+            </div>
+            <h4 class="lab-title">lecture_notes.md & walkthrough.md</h4>
+            <p class="lab-desc">고전 제어 공식을 단계별로 유도하고 분석하는 한글 가이드북 문서 모음.</p>
+            <div class="lab-links">
+              <a href="./MATLAB/transfer-function/lecture_notes.md" class="lab-link-btn">강의노트</a>
+              <a href="./MATLAB/transfer-function/walkthrough.md" class="lab-link-btn">핸드아웃</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Modern Control -->
+      <section class="lab-section modern">
+        <h2 class="section-title modern">
+          <i data-lucide="layers"></i>
+          상태 공간 기반 현대 제어 실습 (Modern Control)
+        </h2>
+        <div class="lab-grid">
+          <div class="lab-card">
+            <div class="lab-card-header">
+              <div class="lab-icon-box"><i data-lucide="git-branch" style="width: 20px; height: 20px;"></i></div>
+              <span class="file-extension ext-m">MATLAB .m</span>
+            </div>
+            <h4 class="lab-title">control_demo_5_statespace.m</h4>
+            <p class="lab-desc">극점배치 ➔ LQR 최적제어 ➔ 상태관측기(Observer) ➔ 칼만필터 결합 LQG 제어 통합 비교 시뮬레이션.</p>
+            <div class="lab-links">
+              <a href="./MATLAB/state-space/control_demo_5_statespace.m" class="lab-link-btn">코드로 이동</a>
+            </div>
+          </div>
+
+          <div class="lab-card">
+            <div class="lab-card-header">
+              <div class="lab-icon-box"><i data-lucide="refresh-cw" style="width: 20px; height: 20px;"></i></div>
+              <span class="file-extension ext-m">MATLAB .m</span>
+            </div>
+            <h4 class="lab-title">lqr_5sec_design.m</h4>
+            <p class="lab-desc">목표 정착 시간(5초) 도달을 위해 LQR 가중치 행렬 Q, R을 자동으로 수정 튜닝해주는 최적 제어 스마트 루프.</p>
+            <div class="lab-links">
+              <a href="./MATLAB/state-space/lqr_5sec_design.m" class="lab-link-btn">코드로 이동</a>
+            </div>
+          </div>
+
+          <div class="lab-card">
+            <div class="lab-card-header">
+              <div class="lab-icon-box"><i data-lucide="file-text" style="width: 20px; height: 20px;"></i></div>
+              <span class="file-extension ext-md">Document</span>
+            </div>
+            <h4 class="lab-title">lqr_tutorial.md & pole_placement.md</h4>
+            <p class="lab-desc">LQR 설계 요령, 아커만식 및 정상상태 속도오차 보상에 필요한 전이 스케일러 유도 기술.</p>
+            <div class="lab-links">
+              <a href="./MATLAB/state-space/lqr_tutorial.md" class="lab-link-btn">LQR 튜토리얼</a>
+              <a href="./MATLAB/state-space/pole_placement.md" class="lab-link-btn">극점배치 유도</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- TAB 3: Course Info -->
+    <div id="info" class="tab-panel">
+      <div class="info-grid">
+        <!-- Professor Card -->
+        <div class="profile-card">
+          <div class="avatar-wrapper">KHU</div>
+          <h2 class="prof-name">김동한 교수</h2>
+          <p class="prof-title">경희대학교 전자공학과</p>
+          
+          <ul class="prof-info-list">
+            <li>
+              <i data-lucide="map-pin" style="width: 18px; height: 18px;"></i>
+              전자정보대학 609호
+            </li>
+            <li>
+              <i data-lucide="phone" style="width: 18px; height: 18px;"></i>
+              내선번호: 3831
+            </li>
+            <li>
+              <i data-lucide="mail" style="width: 18px; height: 18px;"></i>
+              donghani@khu.ac.kr
+            </li>
+            <li>
+              <i data-lucide="clock" style="width: 18px; height: 18px;"></i>
+              상담시간: 매주 수업 후 1시간
+            </li>
+          </ul>
+        </div>
+
+        <!-- Course Details -->
+        <div class="details-card">
+          <div class="detail-item">
+            <h3><i data-lucide="book"></i>교과 주교재</h3>
+            <p><strong>Kuo의 자동제어 10판 (Automatic Control Systems, 10th Edition)</strong></p>
+            <p style="font-size: 0.85rem; margin-top: 5px;">저자: Farid Golnaraghi, Benjamin C. Kuo</p>
+            <div class="textbook-box">
+              <div class="textbook-icon"><i data-lucide="library"></i></div>
+              <div style="font-size: 0.9rem;">공학 전반의 제어 이론 시스템에 관한 정수 및 기본 동작을 완벽하게 학습하는 글로벌 표준 교과서입니다.</div>
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <h3><i data-lucide="video"></i>온라인 강의 채널</h3>
+            <p>수업 내용의 이해를 돕기 위하여 매 교시 강의 영상의 녹화본을 Youtube에 업로드하고 있습니다.</p>
+            <div class="youtube-banner">
+              <div class="youtube-banner-header">
+                <div class="youtube-icon"><i data-lucide="play" style="width: 20px; height: 20px;"></i></div>
+                <div class="yt-title">YouTube 채널 (경희대 김동한)</div>
+              </div>
+              <a href="https://www.youtube.com/channel/UCT_h-5YhlC0t9LEdVckdrXQ" class="yt-link" target="_blank">
+                동영상 시청하러 가기
+                <i data-lucide="external-link" style="width: 16px; height: 16px;"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2026 Kyung Hee University Department of Electronic Engineering. All rights reserved.</p>
+      <p style="margin-top: 5px; font-size: 0.8rem; opacity: 0.7;">본 자료는 김동한 교수님의 자동제어공학 수업 전용으로 제공되며, 소스 코드는 <a href="https://github.com/donghani/class-automatic-control" target="_blank">GitHub</a>에서 확인할 수 있습니다.</p>
+    </footer>
+  </div>
+
+  <script>
+    // Lucide Icons Initialization
+    lucide.createIcons();
+
+    // Tab Switch Logic
+    function switchTab(tabId) {
+      // Deactivate all tabs
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+
+      // Activate selected tab
+      const selectedBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => 
+        btn.getAttribute('onclick').includes(tabId)
+      );
+      if (selectedBtn) selectedBtn.classList.add('active');
+
+      const selectedPanel = document.getElementById(tabId);
+      if (selectedPanel) selectedPanel.classList.add('active');
+    }
+
+    // Interactive Search Logic for Lectures
+    function filterLectures() {
+      const searchInput = document.getElementById('lectureSearch').value.toLowerCase();
+      const cards = document.querySelectorAll('#lecturesGrid .card');
+      
+      cards.forEach(card => {
+        const titleData = card.getAttribute('data-title').toLowerCase();
+        const cardTitleText = card.querySelector('.card-title').innerText.toLowerCase();
+        const cardDescText = card.querySelector('.card-desc').innerText.toLowerCase();
+        
+        if (titleData.includes(searchInput) || cardTitleText.includes(searchInput) || cardDescText.includes(searchInput)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
 </html>
